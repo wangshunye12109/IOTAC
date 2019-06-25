@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define BUFLEN 10240
+#define BUFLEN 102400
 //#define DEBUG
 
 struct tmp_buf{
