@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define BUFLEN 10240
+#define BUFLEN 102400
 //#define DEBUG
 
 struct tmp_buf{
@@ -34,10 +34,26 @@ int main(int argc, char **argv){
 	char resp[16];
 	read(c_fd, resp, 16);
 	int len = atoi(resp);
+	printf("%d\n", len);
 	unsigned char *buffer = (unsigned char *)malloc(len);
 	struct tmp_buf t;
-	int n;
+	int n, sum=0;
+	unsigned char *n_malloc = (unsigned char *)malloc(len+sizeof(struct tmp_buf));
 	while((n=read(c_fd, &t, sizeof(struct tmp_buf)))>0){
+		memcpy(n_malloc+sum, &t, n);
+		sum+=n;
+	}
+//	while((n=read(c_fd, &t, sizeof(struct tmp_buf)))>0){
+//		printf("%d\n", n);
+//		memcpy(buffer+BUFLEN*t.index, t.buf, t.len);
+//		if(t.len<BUFLEN){
+//			
+//		}
+//
+//		printf("recv %d seg\n", t.index);
+//	}
+	for(int c=0; c<len; c+=sizeof(struct tmp_buf)){
+		memcpy(&t, n_malloc+c, sizeof(struct tmp_buf)); 
 		memcpy(buffer+BUFLEN*t.index, t.buf, t.len);
 		if(t.len<BUFLEN){
 			
